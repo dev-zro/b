@@ -3,6 +3,7 @@
 
 TRUE;
 FALSE;
+RAND_MAX;
 ALIVE_CHAR;
 LOOP_TIME_us;
 NUM_SPEEDS;
@@ -48,6 +49,7 @@ deinit_ncurses() {
 init_globals() {
     TRUE = 1;
     FALSE = 0;
+    RAND_MAX= 0x7FFFFFFF;
     ALIVE_CHAR = 'B';
     LOOP_TIME_us = 10000;
     NUM_SPEEDS = 16;
@@ -86,7 +88,7 @@ init_world() {
 init_info() {
     auto x_info_chars, y_info_chars;
     x_info_chars = 20;
-    y_info_chars = 9;
+    y_info_chars = 10;
 
     extrn newwin, new_panel;
     auto info_win;
@@ -101,7 +103,8 @@ init_info() {
     mvwaddstr(info_win, 4, 2, "j -> slow down");
     mvwaddstr(info_win, 5, 2, "c -> clear world");
     mvwaddstr(info_win, 6, 2, "r -> reset world");
-    mvwaddstr(info_win, 7, 2, "q -> quit game");
+    mvwaddstr(info_win, 7, 2, "z -> rand world");
+    mvwaddstr(info_win, 8, 2, "q -> quit game");
 }
 
 is_alive(buf, y, x) {
@@ -129,6 +132,20 @@ reset_world() {
     set_alive(cur_buf, y_mid+1, x_mid-1, TRUE);
     set_alive(cur_buf, y_mid+1, x_mid+0, TRUE);
     set_alive(cur_buf, y_mid+1, x_mid+1, TRUE);
+}
+
+randomize_world() {
+    extrn rand;
+    clear_world();
+    auto y; y = 0; while(y < y_size) {
+        auto x; x = 0; while(x < x_size) {
+            if(rand() < (RAND_MAX / 5)) {
+                set_alive(cur_buf, y, x, TRUE);
+            }
+            x++;
+        }
+        y++;
+    }
 }
 
 update_world() {
@@ -239,6 +256,9 @@ main() {
             redraw = TRUE;
         } else if(input == 'r') {
             reset_world();
+            redraw = TRUE;
+        } else if(input == 'z') {
+            randomize_world();
             redraw = TRUE;
         } else if(input == 0x199) { // KEY_MOUSE
             if (getmouse(mouse_event) == 0) { // OK
