@@ -197,23 +197,23 @@ main() {
     extrn malloc, usleep, getch, show_panel, hide_panel, getmouse, char;
     auto input, redraw, update_in, show_info, stopped, speed_index, mouse_event;
     input = -1;
-    redraw = 1;
+    redraw = TRUE;
     update_in = 0;
-    show_info = 1;
-    stopped = 0;
+    show_info = TRUE;
+    stopped = FALSE;
     speed_index = 4;
     mouse_event = malloc(20); // MEVENT
     while(input != 'q') {
         if(redraw) {
             print_world();
-            redraw = 0;
+            redraw = FALSE;
         }
         usleep(LOOP_TIME_us);
         if(!stopped) {
             update_in--;
             if(update_in <= 0) {
                 update_world();
-                redraw = 1;
+                redraw = TRUE;
                 update_in = char(speeds, speed_index);
             }
         }
@@ -225,7 +225,7 @@ main() {
             } else {
                 hide_panel(info_panel);
             }
-            redraw = 1;
+            redraw = TRUE;
         } else if(input == 's') {
             stopped = !stopped;
         } else if(input == 'k') {
@@ -236,17 +236,17 @@ main() {
             if(speed_index >= NUM_SPEEDS) speed_index = NUM_SPEEDS - 1;
         } else if(input == 'c') {
             clear_world();
-            redraw = 1;
+            redraw = TRUE;
         } else if(input == 'r') {
             reset_world();
-            redraw = 1;
+            redraw = TRUE;
         } else if(input == 0x199) { // KEY_MOUSE
             if (getmouse(mouse_event) == 0) { // OK
                 auto x, y;
                 x = int32(mouse_event, 1) / 2;
                 y = int32(mouse_event, 2);
                 set_alive(cur_buf, y, x, !is_alive(cur_buf, y, x));
-                redraw = 1;
+                redraw = TRUE;
             }
         }
     }
