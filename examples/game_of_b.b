@@ -1,12 +1,12 @@
 // To compile this example you need to pass appropriate linker flags to the b compiler:
 // $ b 65_game_of_b.b -L -lncurses -L -lpanel -run
 
-TRUE;
-FALSE;
-RAND_MAX;
-ALIVE_CHAR;
-LOOP_TIME_us;
-NUM_SPEEDS;
+TRUE 1;
+FALSE 0;
+RAND_MAX 0x7FFFFFFF;
+ALIVE_CHAR 'B';
+LOOP_TIME_us 10000;
+NUM_SPEEDS 16;
 
 x_size;
 y_size;
@@ -47,13 +47,6 @@ deinit_ncurses() {
 }
 
 init_globals() {
-    TRUE = 1;
-    FALSE = 0;
-    RAND_MAX= 0x7FFFFFFF;
-    ALIVE_CHAR = 'B';
-    LOOP_TIME_us = 10000;
-    NUM_SPEEDS = 16;
-
     extrn getmaxx, getmaxy, stdscr, malloc, lchar, char;
     x_size = getmaxx(stdscr) / 2;
     y_size = getmaxy(stdscr);
