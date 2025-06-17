@@ -101,12 +101,12 @@ init_info() {
 }
 
 is_alive(buf, y, x) {
-    extrn lchar, char;
+    extrn char;
     return (char(buf, (y * x_size) + x) != 0);
 }
 
 set_alive(buf, y, x, alive) {
-    extrn lchar, char;
+    extrn lchar;
     lchar(buf, (y * x_size) + x, alive);
 }
 
